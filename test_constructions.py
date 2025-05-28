@@ -28,6 +28,35 @@ def page_contexte_exploration():
         """
     )
 
+    st.subheader("1. Source des données")
+    st.markdown(
+        """
+        Les données utilisées dans ce projet proviennent de sources publiques telles que les images satellites de Google Earth 
+        et les cartes cadastrales disponibles via les services de l'État. Ces données ont été prétraitées pour correspondre aux 
+        besoins du modèle d’apprentissage.
+        """
+    )
+
+    st.subheader("2. Exploration des modèles")
+    st.markdown(
+        """
+        Plusieurs approches ont été envisagées pour détecter les bâtiments illégaux, incluant :
+        - des réseaux de neurones convolutifs (CNN)
+        - des modèles pré-entraînés de segmentation comme U-Net
+        - des modèles de détection comme YOLOv5 et YOLOv8
+
+        Des comparaisons ont été faites selon la précision, le rappel et la vitesse d'exécution.
+        """
+    )
+
+    st.subheader("3. Choix du modèle")
+    st.markdown(
+        """
+        Le modèle retenu est **YOLOv8**, car il présente un bon équilibre entre performance et rapidité, 
+        et permet une détection temps réel avec un faible taux de faux positifs.
+        """
+    )
+
     st.header("Illustrations du contexte")
     col1, col2 = st.columns(2)
     with col1:
