@@ -1,14 +1,6 @@
 import streamlit as st
 from PIL import Image
 
-# Vérification des dépendances facultatives
-try:
-    import folium
-    from streamlit_folium import st_folium
-    FOLIUM_AVAILABLE = True
-except ModuleNotFoundError:
-    FOLIUM_AVAILABLE = False
-
 # Configuration de la page
 st.set_page_config(
     page_title="Detection illegale de batiment",
@@ -49,8 +41,7 @@ def page_contexte_exploration():
 def page_modele_selectione():
     """
     Page 2: Modele selectione
-    - Sélection d’un lieu via carte interactive (Folium)
-    - Récupération des coordonnées
+    - Saisie manuelle des coordonnées
     - Lancement de l’analyse YOLO
     """
     st.title("Modele selectione")
@@ -58,40 +49,20 @@ def page_modele_selectione():
     st.markdown(
         """
         **Étapes d'utilisation** :
-        1. Choisir un point sur la carte pour obtenir ses coordonnées.
-        2. Valider pour lancer l'analyse YOLO sur la zone sélectionnée.
+        1. Saisir la latitude et la longitude de la zone à analyser.
+        2. Cliquer sur **Analyser la zone avec YOLO**.
         """
     )
 
-    if not FOLIUM_AVAILABLE:
-        st.error(
-            "Le module `folium` et `streamlit_folium` n'est pas installé.\n"
-            "Pour l'installer, exécutez : `pip install folium streamlit-folium`"
-        )
-        return
+    lat = st.number_input("Latitude", value=48.856600, format="%.6f")
+    lon = st.number_input("Longitude", value=2.352200, format="%.6f")
 
-    # Création de la carte Folium avec popup de coordonnées
-    m = folium.Map(location=[48.8566, 2.3522], zoom_start=12)
-    m.add_child(folium.LatLngPopup())  # Permet de cliquer et d'obtenir lat/lng
-    st.subheader("Sélectionnez un lieu (Cliquez sur la carte)")
-    map_data = st_folium(m, width=700, height=500)
-
-    # Récupération des dernières coordonnées cliquées
-    if map_data and map_data.get("last_clicked"):
-        coords = map_data["last_clicked"]
-        lat, lon = coords['lat'], coords['lng']
-        st.success(f"Coordonnées sélectionnées : **{lat:.6f}, {lon:.6f}**")
-
-        # Bouton de validation pour lancer l'analyse
-        if st.button("Analyser la zone avec YOLO"):
-            # Ici, on appellerait la fonction backend : analyse_yolo(latitude, longitude)
-            # Pour l'instant, placeholder :
-            st.info("Analyse en cours...")
-            # result = analyse_yolo(lat, lon)
-            # st.write(result)
-            st.write(f"Résultat simulé : 3 bâtiments détectés dont 1 illégal sur le secteur.")
-    else:
-        st.info("Cliquez sur la carte pour sélectionner un point puis validez.")
+    if st.button("Analyser la zone avec YOLO"):
+        # Appel de la fonction backend : analyse_yolo(latitude, longitude)
+        st.info("Analyse en cours...")
+        # result = analyse_yolo(lat, lon)
+        # st.write(result)
+        st.write(f"Résultat simulé : 3 bâtiments détectés dont 1 illégal sur le secteur géré par {lat:.6f}, {lon:.6f}.")
 
 
 def page_detection_demo():
@@ -107,7 +78,6 @@ def page_detection_demo():
     )
 
     if st.button("Démarrer la démo"):
-        # Chargement d'une image et d'un masque préenregistrés
         img = Image.open("assets/demo_image.jpg")
         mask = Image.open("assets/demo_mask.png")
 
