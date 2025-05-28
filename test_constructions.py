@@ -1,7 +1,13 @@
 import streamlit as st
 from PIL import Image
-import folium
-from streamlit_folium import st_folium
+
+# Vérification des dépendances facultatives
+try:
+    import folium
+    from streamlit_folium import st_folium
+    FOLIUM_AVAILABLE = True
+except ModuleNotFoundError:
+    FOLIUM_AVAILABLE = False
 
 # Configuration de la page
 st.set_page_config(
@@ -43,7 +49,7 @@ def page_contexte_exploration():
 def page_modele_selectione():
     """
     Page 2: Modele selectione
-    - Sélection d’un lieu via carte interactive
+    - Sélection d’un lieu via carte interactive (Folium)
     - Récupération des coordonnées
     - Lancement de l’analyse YOLO
     """
@@ -56,6 +62,13 @@ def page_modele_selectione():
         2. Valider pour lancer l'analyse YOLO sur la zone sélectionnée.
         """
     )
+
+    if not FOLIUM_AVAILABLE:
+        st.error(
+            "Le module `folium` et `streamlit_folium` n'est pas installé.\n"
+            "Pour l'installer, exécutez : `pip install folium streamlit-folium`"
+        )
+        return
 
     # Création de la carte Folium avec popup de coordonnées
     m = folium.Map(location=[48.8566, 2.3522], zoom_start=12)
