@@ -32,10 +32,10 @@ def page_contexte_exploration():
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Image aérienne")
-        st.image("assets/aerienne_exemple.jpg", caption="Vue aérienne d'une zone urbaine", use_column_width=True)
+        st.image("assets/aerienne_exemple.jpg", caption="Vue aérienne d'une zone urbaine", use_container_width=True)
     with col2:
         st.subheader("Carte cadastrale")
-        st.image("assets/cadastral_exemple.jpg", caption="Carte cadastrale officielle", use_column_width=True)
+        st.image("assets/cadastral_exemple.jpg", caption="Carte cadastrale officielle", use_container_width=True)
 
 
 def page_modele_selectione():
@@ -84,10 +84,10 @@ def page_detection_demo():
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Image originale")
-            st.image(img, use_column_width=True)
+            st.image(img, use_container_width=True)
         with col2:
             st.subheader("Masque de détection")
-            st.image(mask, use_column_width=True)
+            st.image(mask, use_container_width=True)
 
         st.success("Détection fictive terminée : zone illégale mise en évidence en rouge.")
 
@@ -100,7 +100,8 @@ PAGES = {
 }
 
 st.sidebar.title("Navigation")
-selection = st.sidebar.radio("Aller à", list(PAGES.keys()))
+st.sidebar.radio("Aller à", list(PAGES.keys()), index=0, key="page_selector")
+selection = st.session_state.page_selector
 
 # Exécution de la page sélectionnée
 PAGES[selection]()
